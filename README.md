@@ -4,9 +4,11 @@ An interactive congratulations page for celebrating a new home! 🏡🎉
 
 ## Features
 - Interactive "Catch the Key" game
-- Key dodges your cursor (gets easier after attempts)
+- Key dodges your cursor/finger (gets easier after attempts)
+- Must click/tap 6 times to catch (first 5 times it jumps away)
 - Confetti celebration on success
 - Beautiful congratulations message reveal
+- Fully responsive - works on desktop and mobile 📱💻
 
 ## Local Development
 
