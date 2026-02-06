@@ -51,11 +51,15 @@ function App() {
     }
   }, [mousePos, caught, keyPosition, dodgeRadius])
 
-  const handleKeyCatch = () => {
-    if (clickAttempts < 5) {
+  const handleKeyCatch = (e) => {
+    e.preventDefault()
+    
+    if (clickAttempts < 6) {
       setClickAttempts(prev => prev + 1)
-      const newX = Math.random() * 80 + 10
-      const newY = Math.random() * 80 + 10
+      
+      // Jump to random position with animation
+      const newX = Math.random() * 70 + 15
+      const newY = Math.random() * 70 + 15
       setKeyPosition({ x: newX, y: newY })
       return
     }
@@ -116,7 +120,7 @@ function App() {
         </p>
         {clickAttempts > 0 && (
           <p className="text-sm text-gray-500 mt-2">
-            {clickAttempts >= 4 ? "Almost there! One more try! 😉" : `Oops! Try again! (${clickAttempts}/5)`}
+            {clickAttempts >= 5 ? "Almost there! One more try! 😉" : "Oops! Try again!"}
           </p>
         )}
       </div>
@@ -125,8 +129,8 @@ function App() {
         <div
           id="key"
           onClick={handleKeyCatch}
-          onTouchEnd={handleKeyCatch}
-          className="absolute text-6xl cursor-pointer transition-all duration-300 hover:scale-110 select-none active:scale-125"
+          onTouchStart={handleKeyCatch}
+          className="absolute text-6xl cursor-pointer transition-all duration-200 ease-out hover:scale-110 select-none active:scale-90"
           style={{
             left: `${keyPosition.x}%`,
             top: `${keyPosition.y}%`,
