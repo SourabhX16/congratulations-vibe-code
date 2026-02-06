@@ -4,6 +4,7 @@ import confetti from 'canvas-confetti'
 function App() {
   const [keyPosition, setKeyPosition] = useState({ x: 50, y: 50 })
   const [attempts, setAttempts] = useState(0)
+  const [clickAttempts, setClickAttempts] = useState(0)
   const [caught, setCaught] = useState(false)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
 
@@ -13,8 +14,17 @@ function App() {
     const handleMouseMove = (e) => {
       setMousePos({ x: e.clientX, y: e.clientY })
     }
+    const handleTouchMove = (e) => {
+      if (e.touches[0]) {
+        setMousePos({ x: e.touches[0].clientX, y: e.touches[0].clientY })
+      }
+    }
     window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
+    window.addEventListener('touchmove', handleTouchMove)
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('touchmove', handleTouchMove)
+    }
   }, [])
 
   useEffect(() => {
@@ -42,6 +52,14 @@ function App() {
   }, [mousePos, caught, keyPosition, dodgeRadius])
 
   const handleKeyCatch = () => {
+    if (clickAttempts < 4) {
+      setClickAttempts(prev => prev + 1)
+      const newX = Math.random() * 80 + 10
+      const newY = Math.random() * 80 + 10
+      setKeyPosition({ x: newX, y: newY })
+      return
+    }
+    
     setCaught(true)
     confetti({
       particleCount: 100,
@@ -96,18 +114,19 @@ function App() {
         <p className="text-xl text-gray-600">
           Catch the key to unlock your special message! 🔑
         </p>
-        {attempts > 3 && (
+        {clickAttempts > 0 && (
           <p className="text-sm text-gray-500 mt-2">
-            {attempts > 6 ? "It's getting easier... 😉" : "Keep trying! 💪"}
+            {clickAttempts >= 3 ? "Almost there! One more try! 😉" : `Oops! Try again! (${clickAttempts}/4)`}
           </p>
         )}
       </div>
 
-      <div className="relative w-full h-96 md:h-[500px]">
+      <div className="relative w-full h-96 md:h-[500px] touch-none">
         <div
           id="key"
           onClick={handleKeyCatch}
-          className="absolute text-6xl cursor-pointer transition-all duration-300 hover:scale-110 select-none"
+          onTouchEnd={handleKeyCatch}
+          className="absolute text-6xl cursor-pointer transition-all duration-300 hover:scale-110 select-none active:scale-125"
           style={{
             left: `${keyPosition.x}%`,
             top: `${keyPosition.y}%`,
