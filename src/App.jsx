@@ -52,7 +52,7 @@ function App() {
   }, [mousePos, caught, keyPosition, dodgeRadius])
 
   const handleKeyCatch = () => {
-    if (clickAttempts < 4) {
+    if (clickAttempts < 5) {
       setClickAttempts(prev => prev + 1)
       const newX = Math.random() * 80 + 10
       const newY = Math.random() * 80 + 10
@@ -116,7 +116,7 @@ function App() {
         </p>
         {clickAttempts > 0 && (
           <p className="text-sm text-gray-500 mt-2">
-            {clickAttempts >= 3 ? "Almost there! One more try! 😉" : `Oops! Try again! (${clickAttempts}/4)`}
+            {clickAttempts >= 4 ? "Almost there! One more try! 😉" : `Oops! Try again! (${clickAttempts}/5)`}
           </p>
         )}
       </div>
